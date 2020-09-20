@@ -10,7 +10,6 @@ const imgObj:any={
 	pro:'http://app.juncoax.com:8080/firewebv/Image/', //生产
 }
 
-
 console.log(process.env.NODE_ENV)
 export const httpUrl = urlObj[process.env.NODE_ENV]
 export const imgUrl = imgObj[process.env.NODE_ENV]

@@ -1,9 +1,5 @@
 import { http } from "@/utils/http";
 
-// x 为底 y 的对数（即logx y）：
-export const getBaseLog = function (y: number, x: number = 10) {
-	return Math.log(y) / Math.log(x);
-}
 export const clearNoNum = function (str: string) {
 	str = (str || '').toString();
 	str = str.replace(".", "$#$")//把第一个字符'.'替换成'$#$'

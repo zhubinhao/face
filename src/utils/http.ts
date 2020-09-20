@@ -1,9 +1,7 @@
 import {httpUrl} from './path'
 export const http =function(obj:any){
-	let locale = uni.getStorageSync("locale")|| "zh";
 	const token = uni.getStorageSync('token')||'';
 	obj.data = obj.data?obj.data:{}
-	obj.data.ench = locale==='zh'?'1':'2'; //1中文，2：英文
 	if(token){
 		obj.data.token = token
 	}
