@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from "vue";
-import { http } from "@/utils/http";
 import { Mutation } from "vuex-class";
 import {getOpenIds} from "@/utils/api"
 
@@ -17,7 +16,7 @@ export default Vue.extend({
         user: "admin",
         pwd: "21232F297A57A5A743894A0E4A801FC3"
       };
-      const token = await http({ url: "/JY/GetToken", data }).then((res: any) => res.token);
+      const token = await (this as any).$http.post("/JY/GetToken", data ).then((res: any) => res.token);
       this.$store.commit("setToken", token);
       getOpenIds().then((res:any)=>{
         uni.setStorageSync("openid", res.openid);

@@ -1,26 +1,26 @@
 <template>
   <view class="content" :style="{paddingTop:barHeight+'px'}">
-    <bar :title="title" background="#448EF1" color="#ffffff" />
+    <Bar background="#448EF1" color="#ffffff" />
     <view class="headerBox">
       <view class="bg448"></view>
       <view class="header">
         <view>
-          <text>100</text>
+          <text class="f32">100</text>
           <text>在场人数</text>
         </view>
         <view class="border">
-          <text>100</text>
+          <text class="f32">100</text>
           <text>进场人次</text>
         </view>
         <view>
-          <text>100</text>
+          <text class="f32">100</text>
           <text>离场人次</text>
         </view>
       </view>
     </view>
 
     <view class="cardBox">
-      <view class="card bg1">
+      <view class="card bg1" @click="nativeTo('/pages/index/personnel')">
         <view>
           <text class="title">人员管理</text>
           <image class="img" src="~@/static/img/icon1.png"></image>
@@ -30,7 +30,7 @@
           <text class="number">300</text>
         </view>
       </view>
-      <view class="card bg2">
+      <view class="card bg2" @click="nativeTo('/pages/index/equipment')">
         <view>
           <text class="title">设备管理</text>
           <image class="img" src="~@/static/img/icon2.png"></image>
@@ -41,7 +41,7 @@
           <text class="number">300</text>
         </view>
       </view>
-      <view class="card bg3">
+      <view class="card bg3" @click="nativeTo('/pages/index/organization')">
         <view>
           <text class="title">部门组织</text>
           <image class="img" src="~@/static/img/icon3.png"></image>
@@ -51,7 +51,7 @@
           <text class="number">300</text>
         </view>
       </view>
-      <view class="card bg4">
+      <view class="card bg4" @click="nativeTo('/pages/index/notes')">
         <view>
           <text class="title">进出记录</text>
           <image class="img" src="~@/static/img/icon4.png"></image>
@@ -71,21 +71,21 @@
 <script lang="ts">
 import { State } from "vuex-class";
 import { Vue, Component, Provide } from "vue-property-decorator";
-import bar from "@/component/bar.vue";
+import Bar from "@/component/Bar.vue";
 import List from "@/component/List.vue"
 
 @Component({
-  name: "Index",
   components: {
-    bar,
+    Bar,
     List
   }
 })
 export default class Index extends Vue {
   @Provide() adList: Array<any> = [];
-  @Provide() title: string = "";
   @State barHeight!: number;
-
+  nativeTo(url:string):void{
+    uni.navigateTo({url})
+  }
   onShareAppMessage() {
     return {
       title: "智安云脸",
@@ -103,6 +103,9 @@ export default class Index extends Vue {
     .bg448 {
       height: 120rpx;
       background: #448ef1;
+    }
+    .f32{
+      font-size: 32rpx;
     }
     .header {
       position: absolute;

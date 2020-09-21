@@ -52,6 +52,5 @@ export default class List extends Vue {
     color: #ffffff;
     font-size: 30rpx;
   }
- 
 }
 </style>
