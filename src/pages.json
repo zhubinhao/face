@@ -11,8 +11,7 @@
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#fff",
 		"navigationBarTitleText": "智安云脸",
-		"navigationBarTextStyle": "black",
-		"navigationStyle": "custom"
+		"navigationBarTextStyle": "black"
 	},
 	"tabBar": {
 		"color": "#8a8a8a",

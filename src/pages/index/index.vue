@@ -1,83 +1,74 @@
 <template>
-  <view class="content" :style="{paddingTop:barHeight+'px'}">
-    <bar :title="title" background="#448EF1" color="#ffffff" />
-    <view class="headerBox">
-      <view class="bg448"></view>
-      <view class="header">
-        <view>
-          <text>100</text>
-          <text>在场人数</text>
+  <view class="content">
+
+    <swiper
+    class="swiper"
+      autoplay
+      indicator-color="rgba(0,0,0,0.15)"
+      indicator-active-color="rgba(0,0,0,0.35)"
+      indicator-dots
+      interval="3000"
+      style="height:168rpx; padding-top: 10rpx;"
+      circular
+    >
+      <swiper-item class="scroll_img">
+        <image
+          src="https://file.shenlanbao.com/2020/11/20/file/img_banner_invitation.png"
+          class="slide-image"
+        />
+      </swiper-item>
+    </swiper>
+    <view class="jiu_box">
+       <view  class='item'>
+          <view class="image bg1">
+            <image src="~@/static/img/访客管理.png"></image>
+          </view>
+          <text class='msg'>访客通行</text>
         </view>
-        <view class="border">
-          <text>100</text>
-          <text>进场人次</text>
+        <view class='item' >
+          <view class="image bg2">
+          <image src="~@/static/img/成员.png"></image>
+          </view>
+
+          <text class='msg'>家庭成员</text>
         </view>
-        <view>
-          <text>100</text>
-          <text>离场人次</text>
+        <view class='item' >
+          <view class="image bg3">
+          <image src="~@/static/img/认证.png"></image>
+          </view>
+          <text class='msg'>绑定认证</text>
         </view>
-      </view>
+        <!-- <view class='item' >
+          <view class="image bg4">
+          ...
+          </view>
+          <text class='msg'>敬请期待</text>
+        </view> -->
     </view>
 
-    <view class="cardBox">
-      <view class="card bg1">
+    <view class="title_box">
         <view>
-          <text class="title">人员管理</text>
-          <image class="img" src="~@/static/img/icon1.png"></image>
+           <image src="~@/static/img/小区.png"></image>
+          <text>xx小区</text>
+          <text class="phone">(18270846061)</text>
         </view>
-        <view>
-          <text class="en">Person</text>
-          <text class="number">300</text>
-        </view>
-      </view>
-      <view class="card bg2">
-        <view>
-          <text class="title">设备管理</text>
-          <image class="img" src="~@/static/img/icon2.png"></image>
-
-        </view>
-        <view>
-          <text class="en">Device</text>
-          <text class="number">300</text>
-        </view>
-      </view>
-      <view class="card bg3">
-        <view>
-          <text class="title">部门组织</text>
-          <image class="img" src="~@/static/img/icon3.png"></image>
-        </view>
-        <view>
-          <text class="en">Department</text>
-          <text class="number">300</text>
-        </view>
-      </view>
-      <view class="card bg4">
-        <view>
-          <text class="title">进出记录</text>
-          <image class="img" src="~@/static/img/icon4.png"></image>
-
-        </view>
-        <view>
-          <text class="en">In And Out</text>
-          <text class="number">300</text>
-        </view>
-      </view>
+        <view class="change"> 切换 <text class="iconfont icon-right"></text></view>
     </view>
-    <view class="p">设备列表</view>
-    <List></List>
+    <view class="card">
+      
+      <List></List>
+    </view>
   </view>
 </template>
 
 <script lang="ts">
 import { State } from "vuex-class";
 import { Vue, Component, Provide } from "vue-property-decorator";
-import bar from "@/component/bar.vue";
-import List from "@/component/List.vue"
+import List from "@/component/List.vue";
 
 @Component({
   name: "Index",
   components: {
-    bar,
     List
   }
 })
@@ -97,124 +88,108 @@ export default class Index extends Vue {
 
 <style lang="scss" scope>
 .content {
-  .headerBox {
+  .swiper{
+    margin: 10rpx 0;
+  }
+  .scroll_img {
+    box-sizing: border-box;
+    padding: 0 30rpx;
     position: relative;
-    height: 190rpx;
-    .bg448 {
-      height: 120rpx;
-      background: #448ef1;
-    }
-    .header {
-      position: absolute;
-      width: 690rpx;
-      height: 170rpx;
-      top: 20rpx;
-      left: 30rpx;
-      background: #ffffff;
-      border-radius: 12rpx;
-      display: flex;
-      justify-content: flex-start;
-      align-items: stretch;
-      padding: 30rpx 0;
-      box-sizing: border-box;
-      > view {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 30rpx;
-      }
-      .border{
-          position: relative;
-          &::after{
-            content: "";
-            height: 80rpx;
-            width: 1px;
-            background: #f6f6f6;
-            position: absolute;
-            right: 0;
-            top: 10rpx;
-          }
-          &::before{
-            content: "";
-            height: 80rpx;
-            width: 1px;
-            background: #f6f6f6;
-            position: absolute;
-            left: 0;
-            top: 10rpx;
-          }
-      }
+    image {
+      height: 168rpx;
+      width: 100%;
+      border-radius: 8rpx;
     }
   }
-  .cardBox {
+  .jiu_box {
+    background: white;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin: 30rpx 30rpx 0 30rpx;
-    .card {
-      width: 330rpx;
-      height: 150rpx;
-      border-radius: 10rpx;
-      margin-top: 30rpx;
-      color: white;
-      box-sizing: border-box;
-      padding: 20rpx ;
+    padding: 40rpx 30rpx 30rpx 30rpx;
+    margin: 20rpx 30rpx;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    .item {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      align-items: stretch;
-      view {
+      align-items: center;
+      .image {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+        background-color: #2ec4a7;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
+        justify-content: center;
+        align-items: center;
+        font-size: 32rpx;
+        color: white;
+        image{
+          width: 60rpx;
+          height: 60rpx;
+        }
       }
-      >view:first-child{
+      .bg1{
+        background:  #5DC8F6;
+      }
+      .bg2{
+        background:  #62E3BA;
+      }
+      .bg3{
+        background:  #969CFD;
+      }
+      .bg4{
+        background:  #FBAC8C;
+      }
+      .msg {
+        font-size: 28rpx;
+        margin-top: 20rpx;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+  .title_box {
+      padding: 0 30rpx;
+      background: #ffffff;
+      font-size: 32rpx;
+      margin: 20rpx 30rpx;
+      border-radius: 10rpx;
+      height: 90rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      >view{
+        display: flex;
+        justify-content: flex-start;
         align-items: center;
       }
-      .en {
-        font-size: 26rpx;
-        position: relative;
-        top: -2rpx;
+      image{
+        width: 30rpx;
+        height: 30rpx;
+        margin-right: 10rpx
       }
-      .img{
-          width: 50rpx;
-          height: 50rpx;
-      }
-      .title {
+      .title{
         font-weight: 600;
-        font-size: 34rpx;
-        position: relative;
-        top: -4rpx;
       }
-      .number {
-        width: 120rpx;
-        border-bottom: 1px solid white;
-        text-align: center;
-        padding-bottom: 2rpx;
-        font-size: 30rpx;
+      .phone{
+        font-size: 24rpx;
+        color: #8e8e8e;
       }
-    }
-    .bg1 {
-      background: #1054a9;
-    }
-    .bg2 {
-      background: #1f8ffb;
-    }
-    .bg3 {
-      background: #36c3bd;
-    }
-    .bg4 {
-      background: #5044ee;
-    }
-  }
-  .p{
-      font-size: 32rpx;
-      font-weight: 600;
-      margin: 30rpx;
+      .change{
+        color: #8e8e8e;
+        font-size: 28rpx;
 
+      }
+      .icon-right{
+        position: relative;
+        top: 4rpx;
+      }
+    }
+  .card {
+    padding: 0 30rpx;
   }
+  
 }
 </style>

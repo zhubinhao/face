@@ -12,7 +12,6 @@ import { Vue, Component, Provide, Prop } from "vue-property-decorator";
 @Component
 export default class List extends Vue {
   @Prop() private title!: string;
- 
 }
 </script>
 
@@ -23,27 +22,29 @@ export default class List extends Vue {
   align-items: center;
   background: #ffffff;
   border-radius: 10rpx;
-  margin: 30rpx 20rpx;
   padding: 30rpx;
-  .logo{
+  border-radius: 10rpx;
+  margin-top: 20rpx;
+  box-shadow: 0rpx 2rpx 10rpx 2rpx rgba(237, 237, 237, 0.5);
+  .logo {
     width: 80rpx;
     height: 80rpx;
     border-radius: 50%;
-    background: #2EC4A7;
+    background: #2ec4a7;
     text-align: center;
     line-height: 80rpx;
     color: #ffffff;
     font-size: 40rpx;
-    margin-right: 20rpx; 
+    margin-right: 20rpx;
   }
-  .msg{
+  .msg {
     flex: 1;
   }
-  .red{
-    background: #EA837C;
+  .red {
+    background: #ea837c;
   }
-  .btn{
-    background: #32CDFD;
+  .btn {
+    background: #32cdfd;
     border-radius: 8rpx;
     width: 110rpx;
     height: 60rpx;
@@ -52,6 +53,5 @@ export default class List extends Vue {
     color: #ffffff;
     font-size: 30rpx;
   }
- 
 }
 </style>
