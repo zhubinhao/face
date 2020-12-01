@@ -67,16 +67,16 @@ import { Vue, Component, Provide } from "vue-property-decorator";
 import List from "@/component/List.vue";
 
 @Component({
-  name: "Index",
   components: {
     List
   }
 })
 export default class Index extends Vue {
   @Provide() adList: Array<any> = [];
-  @Provide() title: string = "";
   @State barHeight!: number;
-
+  nativeTo(url:string):void{
+    uni.navigateTo({url})
+  }
   onShareAppMessage() {
     return {
       title: "智安云脸",

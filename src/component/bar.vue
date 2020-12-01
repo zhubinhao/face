@@ -12,13 +12,14 @@ import { Vue, Component, Provide, Prop } from "vue-property-decorator";
 export default class Bar extends Vue {
   @Provide() top: number = 0;
   @Provide() height: number = 0;
-  @Provide() btnTitle: string = "";
   @Provide() showBack:boolean = false;
+
   @Prop() private title!: string;
   @Prop() private background!: string;
   @Prop() private color!: string;
 
   created() {
+    const pagesArr: any = getCurrentPages();
     this.top = uni.getMenuButtonBoundingClientRect().top || 0;
     this.height = 5 + (uni.getMenuButtonBoundingClientRect().height || 0);
     this.$store.commit("setBarHeight", this.top + this.height);
@@ -26,32 +27,13 @@ export default class Bar extends Vue {
       "pages/index/index",
       "pages/my/my"
     ];
-    let pagesArr: any = getCurrentPages();
     let pages = pagesArr[pagesArr.length - 1].route;
     if (!routeArr.includes(pages)) {
       this.showBack = true
     }
-    console.log(pages,routeArr.includes(pages))
-
-   
   }
-  showBacks():void{
-    uni.navigateTo({
-      url:'/pages/project/showBack'
-    })
-
-  }
-
   back(): void {
-    if (this.btnTitle === "返回") {
-      // uni.navigateBack();
-      uni.navigateBack
-    }
-    if (this.btnTitle === "首页") {
-      uni.switchTab({
-        url: "/pages/index/index"
-      });
-    }
+      uni.navigateBack({})
   }
 }
 </script>

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex, { GetterTree, ActionTree, MutationTree }  from 'vuex'
 import main from './modules/main'
-import {http} from '../utils/http'
 
 Vue.use(Vuex)
 
@@ -23,10 +22,6 @@ const mutations: MutationTree<any> = {
 	}
 }; 
 const actions: ActionTree<any, any> = {
-	// async unifiedOrder({commit},data:any){
-	// 	const requery = await http({url:'/pay/unifiedOrder',data,method:'POST'}).then((res:any)=>res)
-	// }
-	
 };
 export default new Vuex.Store({
 	state,

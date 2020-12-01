@@ -4,6 +4,18 @@
 			"path": "pages/index/index"
 		},
 		{
+			"path": "pages/index/equipment"
+		},
+		{
+			"path": "pages/index/notes"
+		},
+		{
+			"path": "pages/index/organization"
+		},
+		{
+			"path": "pages/index/personnel"
+		},
+		{
 			"path": "pages/my/my"
 		}
 	],

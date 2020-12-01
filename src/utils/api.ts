@@ -1,16 +1,16 @@
-import { http } from "@/utils/http";
-
+//只保留2位小数 
+import http from "@/utils/http"
 export const clearNoNum = function (str: string) {
 	str = (str || '').toString();
-	str = str.replace(".", "$#$")//把第一个字符'.'替换成'$#$'
-		.replace(/\./g, "")//把其余的字符'.'替换为空
-		.replace("$#$", ".")//把字符'$#$'替换回原来的'.'
-		.replace(/[^\d.]/g, "")//只能输入数字和'.'
-		.replace(/^\./g, "")//不能以'.'开头
-	str = str.replace(/([0-9]+\.[0-9]{2})[0-9]*/, "$1")//只保留2位小数 
+	str = str.replace(".", "$#$")
+		.replace(/\./g, "")
+		.replace("$#$", ".")
+		.replace(/[^\d.]/g, "")
+		.replace(/^\./g, "")
+	str = str.replace(/([0-9]+\.[0-9]{2})[0-9]*/, "$1")
 	return str;
 }
-export const float = function(e:any,key:string,_this:any){
+export const float = function (e: any, key: string, _this: any) {
 	const v = clearNoNum(e.detail.value);
 	const obj = JSON.parse(JSON.stringify(_this.obj));
 	_this.$nextTick(() => {
@@ -18,18 +18,17 @@ export const float = function(e:any,key:string,_this:any){
 		_this.obj = obj;
 	});
 }
-
-export const getOpenIds = function(){
-	return new Promise((resolve,reject) => uni.login({
+// 获取openid
+export const getOpenIds = function () {
+	return new Promise((resolve, reject) => uni.login({
 		provider: "weixin",
-		success: function(loginRes) {
-			http({ url: "/JY/WX_Openid",data:{code:loginRes.code}}).then(res=>{
+		success: function (loginRes) {
+			http.post("/JY/WX_Openid", { code: loginRes.code }).then(res => {
 				resolve(res)
-			}).catch(res=>{
+			}).catch(res => {
 				reject(res)
 			})
 		}
-	})
-	)
+	}))
 }
 
