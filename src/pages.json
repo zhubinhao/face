@@ -4,19 +4,31 @@
 			"path": "pages/index/index"
 		},
 		{
-			"path": "pages/index/equipment"
+			"path": "pages/my/my",
+			 "style": {
+				 "navigationBarTitleText": "我的"
+			 }
 		},
 		{
-			"path": "pages/index/notes"
+			"path": "pages/my/family",
+			 "style": {
+				 "navigationBarTitleText": "家庭成员"
+			 }
 		},
 		{
-			"path": "pages/index/organization"
+			"path": "pages/my/access",
+			 "style": {
+				 "navigationBarTitleText": "访问"
+			 }
 		},
 		{
-			"path": "pages/index/personnel"
+			"path": "pages/my/out",
+			 "style": {
+				 "navigationBarTitleText": "进出记录"
+			 }
 		},
 		{
-			"path": "pages/my/my"
+			"path": "pages/my/search"
 		}
 	],
 	"globalStyle": {

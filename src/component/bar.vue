@@ -23,11 +23,11 @@ export default class Bar extends Vue {
     this.top = uni.getMenuButtonBoundingClientRect().top || 0;
     this.height = 5 + (uni.getMenuButtonBoundingClientRect().height || 0);
     this.$store.commit("setBarHeight", this.top + this.height);
-    let routeArr: Array<any> = [
+    let routeArr: Array<string> = [
       "pages/index/index",
       "pages/my/my"
     ];
-    let pages = pagesArr[pagesArr.length - 1].route;
+    let pages:string = pagesArr[pagesArr.length - 1].route;
     if (!routeArr.includes(pages)) {
       this.showBack = true
     }

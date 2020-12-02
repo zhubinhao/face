@@ -69,27 +69,27 @@
 </template>
 
 <script lang="ts">
-import { State } from "vuex-class";
-import { Vue, Component, Provide } from "vue-property-decorator";
-import bar from "@/component/bar.vue";
-import List from "@/component/List.vue"
+import { State } from 'vuex-class';
+import { Vue, Component, Provide } from 'vue-property-decorator';
+import bar from '@/component/Bar.vue';
+import List from '@/component/List.vue';
 
 @Component({
-  name: "Index",
+  name: 'Index',
   components: {
     bar,
-    List
-  }
+    List,
+  },
 })
 export default class Index extends Vue {
   @Provide() adList: Array<any> = [];
-  @Provide() title: string = "";
+  @Provide() title: string = '';
   @State barHeight!: number;
 
   onShareAppMessage() {
     return {
-      title: "智安云脸",
-      path: "/pages/index/index"
+      title: '智安云脸',
+      path: '/pages/index/index',
     };
   }
 }
@@ -125,26 +125,26 @@ export default class Index extends Vue {
         align-items: center;
         font-size: 30rpx;
       }
-      .border{
-          position: relative;
-          &::after{
-            content: "";
-            height: 80rpx;
-            width: 1px;
-            background: #f6f6f6;
-            position: absolute;
-            right: 0;
-            top: 10rpx;
-          }
-          &::before{
-            content: "";
-            height: 80rpx;
-            width: 1px;
-            background: #f6f6f6;
-            position: absolute;
-            left: 0;
-            top: 10rpx;
-          }
+      .border {
+        position: relative;
+        &::after {
+          content: '';
+          height: 80rpx;
+          width: 1px;
+          background: #f6f6f6;
+          position: absolute;
+          right: 0;
+          top: 10rpx;
+        }
+        &::before {
+          content: '';
+          height: 80rpx;
+          width: 1px;
+          background: #f6f6f6;
+          position: absolute;
+          left: 0;
+          top: 10rpx;
+        }
       }
     }
   }
@@ -161,7 +161,7 @@ export default class Index extends Vue {
       margin-top: 30rpx;
       color: white;
       box-sizing: border-box;
-      padding: 20rpx ;
+      padding: 20rpx;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -171,7 +171,7 @@ export default class Index extends Vue {
         justify-content: space-between;
         align-items: flex-end;
       }
-      >view:first-child{
+      > view:first-child {
         align-items: center;
       }
       .en {
@@ -179,9 +179,9 @@ export default class Index extends Vue {
         position: relative;
         top: -2rpx;
       }
-      .img{
-          width: 50rpx;
-          height: 50rpx;
+      .img {
+        width: 50rpx;
+        height: 50rpx;
       }
       .title {
         font-weight: 600;
@@ -210,11 +210,10 @@ export default class Index extends Vue {
       background: #5044ee;
     }
   }
-  .p{
-      font-size: 32rpx;
-      font-weight: 600;
-      margin: 30rpx;
-
+  .p {
+    font-size: 32rpx;
+    font-weight: 600;
+    margin: 30rpx;
   }
 }
 </style>

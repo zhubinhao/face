@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide, Prop } from "vue-property-decorator";
+import { Vue, Component, Provide, Prop } from 'vue-property-decorator';
 
 @Component
 export default class List extends Vue {

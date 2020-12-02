@@ -1,5 +1,8 @@
 //只保留2位小数 
 import http from "@/utils/http"
+import { getDefaultCompilerOptions, getDefaultFormatCodeSettings } from 'typescript';
+type Ticon = "none" | "success" | "loading" | undefined;
+
 export const clearNoNum = function (str: string) {
 	str = (str || '').toString();
 	str = str.replace(".", "$#$")
@@ -30,5 +33,21 @@ export const getOpenIds = function () {
 			})
 		}
 	}))
+}
+// toast
+export const toast = function (title: string, icon?: Ticon) {
+	uni.showToast({
+		title,
+		icon: icon || 'none'
+	})
+}
+
+export const getDetes = function(time?:string):string{
+	let date = time?new Date(time):new Date()
+	const y = date.getFullYear()
+	const m = date.getMonth() + 1
+	const d = date.getDate()
+	return `${y}-${m > 9 ? m : '0' + m}-${d > 9 ? d : '0' + d}`
+
 }
 
