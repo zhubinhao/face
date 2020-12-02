@@ -73,7 +73,7 @@ export default class Out extends Vue {
       line-height: 90rpx;
       color: #fff;
       font-size: 38rpx;
-      background: #32cdfd;
+      background: #448EED;
     }
     .main {
       flex: 1;
@@ -89,7 +89,7 @@ export default class Out extends Vue {
         font-size: 26rpx;
         color: gray;
         text {
-          color: #32cdfd;
+          color: #448EED;
         }
       }
       .time {
@@ -98,7 +98,7 @@ export default class Out extends Vue {
       }
     }
     .btn {
-      background: #32cdfd;
+      background: #448EED;
       border-radius: 8rpx;
       width: 110rpx;
       height: 60rpx;

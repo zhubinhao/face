@@ -20,7 +20,7 @@
     <view class="mb20">
       <view class="li bd" @click="nativeTo('/pages/my/access')">
         <image />
-        <view>访问</view>
+        <view>访客</view>
         <text class="iconfont icon-right"></text>
       </view>
       <view class="li bd" @click="nativeTo('/pages/my/out')">

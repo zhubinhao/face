@@ -18,7 +18,7 @@
 		{
 			"path": "pages/my/access",
 			 "style": {
-				 "navigationBarTitleText": "访问"
+				 "navigationBarTitleText": "访客"
 			 }
 		},
 		{
