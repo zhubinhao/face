@@ -1,6 +1,7 @@
 <template>
   <view class="My">
     <view class="header mb20">
+      <user-infor></user-infor>
       <view class="userAvatarUrl">
         <open-data type="userAvatarUrl" class="img"></open-data>
       </view>
@@ -72,6 +73,7 @@ export default class My extends Vue {
     background: #fff;
   }
   .header {
+    position: relative;
     padding: 50rpx 30rpx 70rpx 30rpx;
     display: flex;
     justify-content: flex-start;

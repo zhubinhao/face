@@ -1,12 +1,12 @@
 <script lang="ts">
 import Vue from 'vue';
-import { Mutation } from 'vuex-class';
 import { getOpenIds } from '@/utils/api';
 
 export default Vue.extend({
   mpType: 'app',
   onLaunch() {
     this.getToken();
+    this.getUserInfo();
   },
   onShow() {},
   onHide() {},
@@ -22,6 +22,14 @@ export default Vue.extend({
       this.$store.commit('setToken', token);
       getOpenIds().then((res: any) => {
         uni.setStorageSync('openid', res.openid);
+      });
+    },
+    getUserInfo() {
+      uni.getUserInfo({
+        success: (e: any) => {
+          const { userInfo } = e;
+          this.$store.commit('setUserInfo', userInfo);
+        },
       });
     },
   },
