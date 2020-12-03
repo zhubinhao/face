@@ -31,7 +31,7 @@ export default class Time extends Vue {
   changeModel(): void {
     this.$emit(
       'input',
-      `${this.startData} ${this.startTime}-${this.endData} ${this.endTime}`
+      `${this.startData} ${this.startTime}`
     );
   }
 }

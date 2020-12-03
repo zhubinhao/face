@@ -1,18 +1,18 @@
 <template>
   <view class="Bar" :style="{paddingTop:top+'px',height:height+'px',background:background,color:color }">
-    <text class="back iconfont icon-left" @click="back"  v-if="showBack"></text>
+    <text class="back iconfont icon-left" @click="back" v-if="showBack"></text>
     <text class="title">{{title||"智安云脸"}}</text>
   </view>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide, Prop } from "vue-property-decorator";
-
+import { Vue, Component, Provide, Prop } from 'vue-property-decorator';
+import { MainPages } from '@/utils/obj';
 @Component
 export default class Bar extends Vue {
   @Provide() top: number = 0;
   @Provide() height: number = 0;
-  @Provide() showBack:boolean = false;
+  @Provide() showBack: boolean = false;
 
   @Prop() private title!: string;
   @Prop() private background!: string;
@@ -22,18 +22,15 @@ export default class Bar extends Vue {
     const pagesArr: any = getCurrentPages();
     this.top = uni.getMenuButtonBoundingClientRect().top || 0;
     this.height = 5 + (uni.getMenuButtonBoundingClientRect().height || 0);
-    this.$store.commit("setBarHeight", this.top + this.height);
-    let routeArr: Array<string> = [
-      "pages/index/index",
-      "pages/my/my"
-    ];
-    let pages:string = pagesArr[pagesArr.length - 1].route;
+    this.$store.commit('setBarHeight', this.top + this.height);
+    let routeArr: Array<string> = MainPages;
+    let pages: string = pagesArr[pagesArr.length - 1].route;
     if (!routeArr.includes(pages)) {
-      this.showBack = true
+      this.showBack = true;
     }
   }
   back(): void {
-      uni.navigateBack({})
+    uni.navigateBack({});
   }
 }
 </script>
@@ -56,12 +53,11 @@ export default class Bar extends Vue {
     left: 30rpx;
     width: 50rpx;
     padding: 10rpx 0;
-
   }
   .blue {
     color: #1296db;
   }
-  .title{
+  .title {
     width: 300rpx;
     position: relative;
     text-align: center;

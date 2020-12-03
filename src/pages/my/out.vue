@@ -15,19 +15,29 @@
       </view>
       <view class="btn">进</view>
     </view>
+
+    <loading-more :type="dataType"></loading-more>
   </view>
 </template>
 
 <script lang="ts">
+import LoadingMore from '@/component/LoadingMore.vue';
 import { Vue, Component, Provide } from 'vue-property-decorator';
-@Component
+@Component({
+   components: {
+    'loading-more': LoadingMore,
+  },
+})
 export default class Out extends Vue {
   @Provide() list: Array<any> = [1,2,3];
-  nativeTo(): void {
-    uni.navigateTo({ url: '/pages/my/search' });
-  }
+  @Provide() pageNo: number = 1;
+  @Provide() dataType: number = 0; //0上拉加载更多,1加载中,2没有更多数据
+  
   onLoad(optons: any) {
     console.log(optons);
+  }
+  nativeTo(): void {
+    uni.navigateTo({ url: '/pages/my/search' });
   }
 }
 </script>

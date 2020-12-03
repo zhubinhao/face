@@ -1,7 +1,6 @@
 //只保留2位小数 
 import http from "@/utils/http"
-import { getDefaultCompilerOptions, getDefaultFormatCodeSettings } from 'typescript';
-type Ticon = "none" | "success" | "loading" | undefined;
+import { Ticon } from "@/Interfaces/Icommon"
 
 export const clearNoNum = function (str: string) {
 	str = (str || '').toString();

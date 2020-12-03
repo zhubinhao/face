@@ -28,6 +28,12 @@
 			 }
 		},
 		{
+			"path": "pages/my/camera",
+			 "style": {
+				 "navigationBarTitleText": "拍照"
+			 }
+		},
+		{
 			"path": "pages/my/search"
 		}
 	],

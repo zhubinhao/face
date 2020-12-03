@@ -1,49 +1,47 @@
 import { httpUrl } from './path'
-class http {
-	constructor() {
+import { Iobj, Tmethod } from '@/Interfaces/Icommon'
+import { toast } from '@/utils/api'
+
+class Http {
+	constructor() { }
+
+	get(url: string, data: Iobj = {}) {
+		return this.axios(url, data, 'GET')
 	}
-	get(url: string, data: any) {
+
+	post(url: string, data: Iobj = {}) {
+		return this.axios(url, data, 'POST')
+	}
+
+	private axios(url: string, data: Iobj, method: Tmethod) {
 		return new Promise((resolve, reject) => uni.request({
 			url: httpUrl + url,
 			data: this.getData(data),
-			method: "POST",
+			method: method,
 			header: this.getHeader(),
 			success: (res: any) => {
 				if (res.data.flag == 1 || res.data.flag === undefined) {
 					resolve(res.data)
 				} else {
+					// toast("")
 					reject(res.data)
 				}
 			}
 		}))
 	}
-	post(url: string, data: any) {
-		return new Promise((resolve, reject) => uni.request({
-			url: httpUrl + url,
-			data: this.getData(data),
-			method: "POST",
-			header: this.getHeader(),
-			success: (res: any) => {
-				if (res.data.flag == 1 || res.data.flag === undefined) {
-					resolve(res.data)
-				} else {
-					reject(res.data)
-				}
-			}
-		}))
-	}
-	getData(data: any): any {
-		let obj = data || {}
+
+	private getData(data: Iobj): Iobj {
 		const token = uni.getStorageSync('token') || '';
 		if (token) {
-			obj.token = token
+			data.token = token
 		}
-		return obj
+		return data
 	}
-	getHeader(): any {
+
+	private getHeader(): Iobj {
 		return {
 			"content-type": "application/json",
 		}
 	}
 }
-export default new http()
+export default new Http()

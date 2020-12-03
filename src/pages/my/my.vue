@@ -45,7 +45,6 @@
       <view>问题反馈</view>
       <text class="iconfont icon-right"></text>
     </view>
-
   </view>
 </template>
 
@@ -54,6 +53,8 @@ import { Vue, Component, Provide } from 'vue-property-decorator';
 import { toast } from '@/utils/api';
 @Component
 export default class My extends Vue {
+  created(){
+  }
   nativeTo(url: string): void {
     if (url) {
       wx.navigateTo({ url });
@@ -61,6 +62,7 @@ export default class My extends Vue {
     }
     toast('该功能暂未开发');
   }
+ 
 }
 </script>
 
