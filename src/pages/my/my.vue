@@ -54,8 +54,7 @@ import { Vue, Component, Provide } from 'vue-property-decorator';
 import { toast } from '@/utils/api';
 @Component
 export default class My extends Vue {
-  created(){
-  }
+  created() {}
   nativeTo(url: string): void {
     if (url) {
       wx.navigateTo({ url });
@@ -63,7 +62,6 @@ export default class My extends Vue {
     }
     toast('该功能暂未开发');
   }
- 
 }
 </script>
 

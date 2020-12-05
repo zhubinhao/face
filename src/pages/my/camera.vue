@@ -5,6 +5,8 @@
         <!-- <canvas canvas-id="canvas" style="width: 100%; height: 300px;"></canvas> -->
         <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
         <cover-view class='coverImg1'></cover-view>
+        <cover-view class='bg'></cover-view>
+
       </camera>
     </view>
   </view>
@@ -24,20 +26,19 @@ export default class Camera extends Vue {
     ctx.draw();
     console.log(ctx);
     wx.getSetting({
-  success(res) {
-    console.log(res.authSetting['scope.camera'])
-    if (!res.authSetting['scope.camera']) {
-      wx.authorize({
-        scope: 'scope.camera',
-        success () {
-        },
-        fail(e){
-            console.log(e)
+      success(res) {
+        console.log(res.authSetting['scope.camera']);
+        if (!res.authSetting['scope.camera']) {
+          wx.authorize({
+            scope: 'scope.camera',
+            success() {},
+            fail(e) {
+              console.log(e);
+            },
+          });
         }
-      })
-    }
-  }
-})
+      },
+    });
   }
   takePhoto() {
     const ctx = wx.createCameraContext();
@@ -45,6 +46,7 @@ export default class Camera extends Vue {
       quality: 'high',
       success: (res) => {
         this.src = res.tempImagePath;
+        console.log(res.tempImagePath)
       },
     });
   }
@@ -52,28 +54,39 @@ export default class Camera extends Vue {
 </script>
 
 <style lang="scss" scoped>
+
 .Camera {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
 }
-.coverImg {
-  width: 690rpx;
-  height: 540rpx;
-  margin: 30rpx;
- 
+.bg{
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 860rpx;
+  bottom: 0;
+  background: rgba(0,0,0,0.84);
 }
-.coverImg1{
-  position: absolute;
+.coverImg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 860rpx;
+}
+.coverImg1 {
+  position: fixed;
   width: 100rpx;
   height: 100rpx;
   border-radius: 50%;
-  border: 20rpx solid #B8ADA9;
+  border: 20rpx solid #b8ada9;
   bottom: 30rpx;
   background: white;
   left: 50%;
   margin-left: -70rpx;
+  z-index: 9;
 }
 </style>
