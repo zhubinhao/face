@@ -1,7 +1,7 @@
 <template>
   <view>
-    <view class="Camera">
-      <camera device-position="front" flash="off" class="Camera">
+    <view class="Camera" v-if="show">
+      <camera device-position="front" flash="off" class="Camera" >
         <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
         <cover-view class='coverImg1' @click="takePhoto"></cover-view>
         <cover-view class='bg'></cover-view>
@@ -16,11 +16,13 @@ import { Vue, Component, Provide, Prop, Model } from 'vue-property-decorator';
 import { Mutation } from 'vuex-class'
 @Component
 export default class Camera extends Vue {
+  @Provide() show:Boolean = false;
   @Provide() src: string = '';
   @Provide() img: string = '../../static/img/face.png';
   @Mutation public setHeaderImg!:Function
   onReady() {
     uni.setStorageSync('camera',true)
+    this.show = true
   }
   takePhoto() {
     const ctx = wx.createCameraContext();

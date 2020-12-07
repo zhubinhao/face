@@ -5,16 +5,28 @@
     </view>
     <view>
       <view class="li">
-        <text>公<text class="hidden">一</text>司<text class="hidden">名</text>:</text>
-        <input type="number" :disabled="!showSearch" v-model="corpname" placeholder="请填写企业编号">
+        <text>
+          公
+          <text class="hidden">一</text>司
+          <text class="hidden">名</text>:
+        </text>
+        <input type="number" :disabled="!showSearch" v-model="corpname" placeholder="请填写企业编号" />
         <view @click="searchs" v-if="showSearch">查询</view>
       </view>
       <view class="li">
-        <text>姓<text class="hidden">一</text>名<text class="hidden">一</text>:</text>
-        <input type="text" v-model="inner.name" placeholder="请填写姓名">
+        <text>
+          姓
+          <text class="hidden">一</text>名
+          <text class="hidden">一</text>:
+        </text>
+        <input type="text" v-model="inner.name" placeholder="请填写姓名" />
       </view>
       <view class="li">
-        <text>性<text class="hidden">一</text>别<text class="hidden">一</text>:</text>
+        <text>
+          性
+          <text class="hidden">一</text>别
+          <text class="hidden">一</text>:
+        </text>
         <view>
           <label class="radio" @click="changeSex(1)">
             <radio :value="1" :checked="inner.sex==1" />男
@@ -25,20 +37,31 @@
         </view>
       </view>
       <view class="li">
-        <text>手机号<text class="hidden">一</text>:</text>
-        <input type="number" v-model="inner.mobile" maxlength="11" placeholder="请填写手机号称">
+        <text>
+          手机号
+          <text class="hidden">一</text>:
+        </text>
+        <input type="number" v-model="inner.mobile" maxlength="11" placeholder="请填写手机号称" />
       </view>
       <view class="li">
         <text>身份证号:</text>
-        <input type="idcard" v-model="inner.cardid" maxlength="18" placeholder="请填写身份证号">
+        <input type="idcard" v-model="inner.cardid" maxlength="18" placeholder="请填写身份证号" />
       </view>
       <view class="li">
-        <text>部<text class="hidden">一</text>门<text class="hidden">一</text>:</text>
-        <input type="text" v-model="inner.dept" placeholder="请填写部门">
+        <text>
+          部
+          <text class="hidden">一</text>门
+          <text class="hidden">一</text>:
+        </text>
+        <input type="text" v-model="inner.dept" placeholder="请填写部门" />
       </view>
       <view class="li">
-        <text>职<text class="hidden">一</text>称<text class="hidden">一</text>:</text>
-        <input type="text" v-model="inner.job" placeholder="请填写职称">
+        <text>
+          职
+          <text class="hidden">一</text>称
+          <text class="hidden">一</text>:
+        </text>
+        <input type="text" v-model="inner.job" placeholder="请填写职称" />
       </view>
 
       <view class="btn">
@@ -52,14 +75,15 @@
 
       <z-alert msg="请到设置中开启摄像头权限" openType="openSetting" ref="alert"></z-alert>
     </view>
+  </view>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide, Watch } from 'vue-property-decorator';
-import { State } from 'vuex-class';
-import { Iobj } from '@/Interfaces/Icommon';
-import { toast, isPhone, isIdCard } from '@/utils/api';
-import http from '@/utils/http';
+import { Vue, Component, Provide, Watch } from "vue-property-decorator";
+import { State } from "vuex-class";
+import { Iobj } from "@/Interfaces/Icommon";
+import { toast, isPhone, isIdCard } from "@/utils/api";
+import http from "@/utils/http";
 
 @Component
 export default class Index extends Vue {
@@ -68,68 +92,66 @@ export default class Index extends Vue {
   @State public headerImg!: string;
 
   @Provide() showSearch: Boolean = false;
-  @Provide() corpname: string = '';
-  @Provide() options: Iobj = {};
-  @Provide() img: string = require('@/static/img/headerImg.png');
+  @Provide() corpname: string = "";
+  @Provide() code: string = "";
+  @Provide() img: string = require("@/static/img/headerImg.png");
   @Provide() inner: Iobj = {
-    wxopenid: '',
-    wxname: '',
-    name: '',
-    mobile: '',
-    corpcode: '',
-    sex: '1',
-    cardid: '',
-    dept: '',
-    job: '',
-    image: '',
+    wxopenid: "",
+    wxname: "",
+    name: "",
+    mobile: "",
+    corpcode: "",
+    sex: "1",
+    cardid: "",
+    dept: "",
+    job: "",
+    image: ""
   };
-  @Watch('headerImg')
+  @Watch("headerImg")
   headerImgChange() {
     this.uploadImg();
   }
 
-  @Watch('token')
+  @Watch("token")
   tokenChange() {
-    const { options } = this;
-    let code = options.scene || options.corpcode
-    if(code){
-      this.getInfor( code);
-    }else{
-      this.showSearch = true
+    if (this.code) {
+      this.getInfor(this.code);
+    } else {
+      this.showSearch = true;
     }
   }
 
   onLoad(options: Iobj) {
-    this.options = options;
+    this.code = options.scene || options.corpcode||uni.getStorageSync('corpname')
+    this.token && this.code && this.getInfor(this.code);
   }
   changeSex(sex: number): void {
     this.inner = {
       ...this.inner,
-      sex,
+      sex
     };
   }
-  async searchs(){
-    const data: any = await http.post('/Corp_Get', { corpcode:this.corpname });
-     this.inner = {
+  async searchs() {
+    const data: any = await http.post("/Corp_Get", { corpcode: this.corpname });
+    uni.setStorageSync('corpname',this.corpname)
+    this.inner = {
       ...this.inner,
-      corpcode:this.corpname,
+      corpcode: this.corpname
     };
-    this.corpname = data.corpname
-    this.showSearch = false
-    
-
+    this.corpname = data.corpname;
+    this.showSearch = false;
   }
   async getInfor(corpcode: string) {
-    const data: any = await http.post('/Corp_Get', { corpcode });
+    const data: any = await http.post("/Corp_Get", { corpcode });
     this.corpname = data.corpname;
     this.inner = {
       ...this.inner,
-      corpcode,
+      corpcode
     };
   }
   async submits(data: Iobj) {
-    await http.post('/gather', data);
-    uni.showToast({ title: '提交成功' });
+    await http.post("/gather", data);
+    uni.showToast({ title: "提交成功" });
     const t = setTimeout(() => {
       clearTimeout(t);
       this.clearn();
@@ -138,83 +160,84 @@ export default class Index extends Vue {
   async uploadImg() {
     const { corpcode } = this.inner;
     const res: any = await http.uploadFile(
-      '/ImagePerson',
+      "/ImagePerson",
       this.headerImg,
       corpcode
     );
     this.inner = {
       ...this.inner,
-      image: res.url,
+      image: res.url
     };
   }
-  toList():void {
-    uni.navigateTo({ url: '/pages/index/list' });
+  toList(): void {
+    uni.navigateTo({ url: "/pages/index/list" });
   }
   camera() {
-    const camera = uni.getStorageSync('camera');
+    const camera = uni.getStorageSync("camera");
     if (!camera) {
-      uni.navigateTo({ url: '/pages/my/camera' });
+      uni.navigateTo({ url: "/pages/my/camera" });
     } else {
       wx.getSetting({
-        success: (res) => {
-          console.log(res.authSetting['scope.camera']);
-          if (res.authSetting['scope.camera'] === false) {
+        success: res => {
+          console.log(res.authSetting["scope.camera"]);
+          if (res.authSetting["scope.camera"] === false) {
             (this as any).$refs.alert.open();
           } else {
-            uni.navigateTo({ url: '/pages/my/camera' });
+            uni.navigateTo({ url: "/pages/my/camera" });
           }
-        },
+        }
       });
     }
   }
   clearn(): void {
+    const {corpcode,sex} = this.inner
     this.inner = {
-      wxopenid: '',
-      wxname: '',
-      name: '',
-      mobile: '',
-      corpcode: '',
-      sex: '1',
-      cardid: '',
-      dept: '',
-      job: '',
-      image: '',
+      wxopenid: "",
+      wxname: "",
+      name: "",
+      mobile: "",
+      cardid: "",
+      dept: "",
+      job: "",
+      image: "",
+      corpcode,
+      sex
     };
-    this.corpname = '';
   }
   confirm(): void {
     const { image, name, mobile, corpcode, cardid, dept, job } = this.inner;
     const { nickName } = this.userInfo;
     if (!image) {
-      toast('请上传图片');
+      toast("请上传图片");
       return;
     }
     if (!name) {
-      toast('请填写姓名');
+      toast("请填写姓名");
       return;
     }
     if (!corpcode) {
-      toast('请填写公司名');
+      toast("请填写公司名");
       return;
     }
     if (!mobile) {
-      toast('请填写手机号码');
+      toast("请填写手机号码");
       return;
     }
     if (isPhone(mobile)) {
-      toast('请填写正确的手机号码');
+      toast("请填写正确的手机号码");
       return;
     }
     this.submits({
       ...this.inner,
       wxname: nickName,
-      wxopenid: uni.getStorageSync('openid'),
+      wxopenid: uni.getStorageSync("openid")
     });
   }
   onShareAppMessage() {
+    console.log(`/pages/index/index?corpcode=${this.inner.corpcode}`);
     return {
-      title: '智安云脸',
-      path: `/pages/index/index?corpcode=${this.inner.corpcode}`,
+      title: "智安云脸",
+      path: `/pages/index/index?corpcode=${this.inner.corpcode}`
     };
   }
 }
