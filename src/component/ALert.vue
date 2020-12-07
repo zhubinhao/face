@@ -18,7 +18,7 @@ export default class ALert extends Vue {
   @Prop({ default: '温馨提示' }) public title!: string;
   @Prop({ default: '温馨提示' }) public msg!: string;
   @Prop() public openType!: string;
-  @Provide() show: boolean = true;
+  @Provide() show: boolean = false;
 
   open(): void {
     this.show = true;

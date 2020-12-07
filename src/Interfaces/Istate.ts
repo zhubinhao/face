@@ -3,4 +3,5 @@ export interface Istate {
   token: string
   barHeight: number
   userInfo: Iobj
+  headerImg: string
 }

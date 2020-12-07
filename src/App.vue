@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import { getOpenIds } from '@/utils/api';
+import http from '@/utils/http';
 
 export default Vue.extend({
   mpType: 'app',
@@ -11,17 +11,24 @@ export default Vue.extend({
   onShow() {},
   onHide() {},
   methods: {
-    async getToken() {
-      const data = {
-        user: 'admin',
-        pwd: '21232F297A57A5A743894A0E4A801FC3',
-      };
-      const token = await (this as any).$http
-        .post('/JY/GetToken', data)
-        .then((res: any) => res.token);
-      this.$store.commit('setToken', token);
-      getOpenIds().then((res: any) => {
-        uni.setStorageSync('openid', res.openid);
+    getToken() {
+      const _this = this
+      uni.login({
+        provider: 'weixin',
+        success: function (loginRes) {
+          http
+            .post('/wxopenID', {
+              token: '{A9B62A7B-CE65-4D80-A1B5-0713CC529F13}',
+              code: loginRes.code,
+            })
+            .then((res:any) => {
+              uni.setStorageSync('openid', res.openid);
+              uni.setStorageSync('token', res.token);
+              _this.$store.commit('setToken', res.token);
+              console.log(res)
+            })
+            .catch((res) => {});
+        },
       });
     },
     getUserInfo() {

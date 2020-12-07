@@ -2,11 +2,9 @@
   <view>
     <view class="Camera">
       <camera device-position="front" flash="off" class="Camera">
-        <!-- <canvas canvas-id="canvas" style="width: 100%; height: 300px;"></canvas> -->
         <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
-        <cover-view class='coverImg1'></cover-view>
+        <cover-view class='coverImg1' @click="takePhoto"></cover-view>
         <cover-view class='bg'></cover-view>
-
       </camera>
     </view>
   </view>
@@ -15,38 +13,22 @@
 
 <script lang="ts">
 import { Vue, Component, Provide, Prop, Model } from 'vue-property-decorator';
-
+import { Mutation } from 'vuex-class'
 @Component
 export default class Camera extends Vue {
   @Provide() src: string = '';
   @Provide() img: string = '../../static/img/face.png';
+  @Mutation public setHeaderImg!:Function
   onReady() {
-    const ctx = wx.createCanvasContext('canvas');
-    ctx.drawImage(this.img, 0, 0, 250, 300);
-    ctx.draw();
-    console.log(ctx);
-    wx.getSetting({
-      success(res) {
-        console.log(res.authSetting['scope.camera']);
-        if (!res.authSetting['scope.camera']) {
-          wx.authorize({
-            scope: 'scope.camera',
-            success() {},
-            fail(e) {
-              console.log(e);
-            },
-          });
-        }
-      },
-    });
+    uni.setStorageSync('camera',true)
   }
   takePhoto() {
     const ctx = wx.createCameraContext();
     ctx.takePhoto({
       quality: 'high',
       success: (res) => {
-        this.src = res.tempImagePath;
-        console.log(res.tempImagePath)
+        this.setHeaderImg(res.tempImagePath)
+        uni.navigateBack({})
       },
     });
   }
@@ -69,7 +51,7 @@ export default class Camera extends Vue {
   right: 0;
   top: 860rpx;
   bottom: 0;
-  background: rgba(0,0,0,0.84);
+  background: rgba(0,0,0,0.35);
 }
 .coverImg {
   position: fixed;

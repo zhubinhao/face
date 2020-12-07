@@ -19,6 +19,7 @@ export default class UserInfor extends Vue {
   }
   getuserinfo(e: any) {
     const { userInfo } = e.detail;
+    if(!userInfo) return
     this.show = false;
     this.setUserInfo(userInfo);
   }
@@ -33,6 +34,6 @@ export default class UserInfor extends Vue {
   top: 0;
   bottom: 0;
   z-index: 999;
-  background: red;
+  background: transparent;
 }
 </style>

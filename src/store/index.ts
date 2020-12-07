@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state: Istate = {
 	token: uni.getStorageSync('token') || '',
 	barHeight: uni.getStorageSync('barHeight'),
-	userInfo: uni.getStorageSync('userInfo')||{}
+	userInfo: uni.getStorageSync('userInfo') || {},
+	headerImg: ''
 };
 const getters: GetterTree<any, any> = {
 
@@ -26,6 +27,9 @@ const mutations: MutationTree<any> = {
 	setUserInfo(state: Istate, userInfo: Iobj) {
 		uni.setStorageSync('userInfo', userInfo)
 		state.userInfo = userInfo
+	},
+	setHeaderImg(state: Istate, headerImg: string) {
+		state.headerImg = headerImg
 	}
 };
 const actions: ActionTree<any, any> = {
