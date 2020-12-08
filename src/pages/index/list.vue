@@ -23,13 +23,14 @@
         {{item.gat_job}}
       </view>
     </view>
+    <view v-if="list.length==0" class="wu">暂无登记记录</view>
   </view>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide } from "vue-property-decorator";
-import { Iobj } from "@/Interfaces/Icommon";
-import http from "@/utils/http";
+import { Vue, Component, Provide } from 'vue-property-decorator';
+import { Iobj } from '@/Interfaces/Icommon';
+import http from '@/utils/http';
 
 @Component
 export default class List extends Vue {
@@ -38,8 +39,8 @@ export default class List extends Vue {
     this.getGather();
   }
   async getGather() {
-    const data: any = await http.post("/gather_Get", {
-      wxopenid: uni.getStorageSync("openid")
+    const data: any = await http.post('/gather_Get', {
+      wxopenid: uni.getStorageSync('openid'),
     });
     this.list = data.data;
     console.log(data);
@@ -65,6 +66,12 @@ page {
     text {
       color: black;
     }
+  }
+  .wu{
+    color: gray;
+    text-align: center;
+    margin: 30rpx;
+    font-size: 30rpx;
   }
 }
 </style>

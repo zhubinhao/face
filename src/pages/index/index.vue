@@ -286,6 +286,7 @@ page {
   }
   .btn,
   .btn1 {
+    position: relative;
     width: 690rpx;
     margin: 30rpx auto;
     border-radius: 10rpx;
