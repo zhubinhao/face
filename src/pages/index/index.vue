@@ -150,7 +150,8 @@ export default class Index extends Vue {
     };
   }
   async submits(data: Iobj) {
-    await http.post("/gather", data);
+    const that = this
+    await http.postLock("/gather", data,that);
     uni.showToast({ title: "提交成功" });
     const t = setTimeout(() => {
       clearTimeout(t);

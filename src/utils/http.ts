@@ -3,29 +3,42 @@ import { Iobj, Tmethod } from '@/Interfaces/Icommon'
 import { toast } from '@/utils/api'
 
 class Http {
-	constructor() { }
-
+	private httpUrl: string
+	constructor(url?: string) {
+		this.httpUrl = url || httpUrl
+	}
+	// get
 	get(url: string, data: Iobj = {}) {
 		return this.axios(url, data, 'GET')
 	}
-
+	// post
 	post(url: string, data: Iobj = {}) {
 		return this.axios(url, data, 'POST')
 	}
-	uploadFile(url: string, filePath: string,corpcode:string) {
-		uni.showLoading({title:"图片上传中..."})
-		return new Promise((resolve, reject) =>uni.uploadFile({
-			url: httpUrl + url,
+	// post 枷锁lock
+	postLock(url: string, data: Iobj = {}, that: any) {
+		if (that.lock) {
+			return new Promise((resolve, reject)=>reject())
+		} else {
+			that.lock = true
+			return this.axios(url, data, 'POST', that)
+		}
+	}
+	// 上传附件
+	uploadFile(url: string, filePath: string, corpcode: string) {
+		uni.showLoading({ title: "图片上传中..." })
+		return new Promise((resolve, reject) => uni.uploadFile({
+			url: this.httpUrl + url,
 			filePath: filePath,
 			name: 'file',
 			formData: {
-				'token':uni.getStorageSync('token'),
-				'corpcode':corpcode
+				'token': uni.getStorageSync('token'),
+				'corpcode': corpcode
 			},
 			success: (res: any) => {
 				uni.hideLoading()
 				resolve(JSON.parse(res.data))
-			},fail:(res: any)=>{
+			}, fail: (res: any) => {
 				uni.hideLoading()
 				reject(res.data)
 			}
@@ -34,19 +47,20 @@ class Http {
 	}
 
 
-	private axios(url: string, data: Iobj, method: Tmethod) {
+	private axios(url: string, data: Iobj, method: Tmethod, that?: any) {
 		return new Promise((resolve, reject) => uni.request({
-			url: httpUrl + url,
+			url: this.httpUrl + url,
 			data: this.getData(data),
 			method: method,
 			header: this.getHeader(),
 			success: (res: any) => {
 				if (res.data.code == 0) {
-					resolve(res.data)
+						resolve(res.data)
 				} else {
-					toast(res.data.msg)
+					res.data.msg && toast(res.data.msg)
 					reject(res.data)
 				}
+				if (that) { that.lock = false }
 			}
 		}))
 	}
@@ -66,3 +80,4 @@ class Http {
 	}
 }
 export default new Http()
+export const http = Http
