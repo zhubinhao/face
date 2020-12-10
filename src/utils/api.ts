@@ -47,3 +47,22 @@ export const getDetes = function (time?: string): string {
 	return `${y}-${m > 9 ? m : '0' + m}-${d > 9 ? d : '0' + d}`
 }
 
+//画布转图片
+export const canvasToTempFilePath = function (canvasId: string, w: number, h: number) {
+	return new Promise((resolve, reject) => wx.canvasToTempFilePath({
+		x: 0,
+		y: 0,
+		width: w,
+		height: h,
+		destWidth: w,
+		destHeight: h,
+		canvasId,
+		success: (res) => {
+			resolve(res.tempFilePath)
+		},
+		fail: (res) => {
+			console.log(res);
+			reject()
+		},
+	}))
+}

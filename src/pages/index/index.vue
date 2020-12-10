@@ -1,8 +1,6 @@
 <template>
   <view class="Index">
-    <view class="imgBox">
-      <image :src="inner.image||img" class="img" @click="camera" mode="widthFix" />
-    </view>
+    <image :src="inner.image||img" class="img" @click="camera" mode="widthFix" />
     <view>
       <view class="li">
         <text>
@@ -79,11 +77,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide, Watch } from "vue-property-decorator";
-import { State } from "vuex-class";
-import { Iobj } from "@/Interfaces/Icommon";
-import { toast, isPhone, isIdCard } from "@/utils/api";
-import http from "@/utils/http";
+import { Vue, Component, Provide, Watch } from 'vue-property-decorator';
+import { State } from 'vuex-class';
+import { Iobj } from '@/Interfaces/Icommon';
+import { toast, isPhone, isIdCard } from '@/utils/api';
+import http from '@/utils/http';
 
 @Component
 export default class Index extends Vue {
@@ -92,27 +90,30 @@ export default class Index extends Vue {
   @State public headerImg!: string;
 
   @Provide() showSearch: Boolean = false;
-  @Provide() corpname: string = "";
-  @Provide() code: string = "";
-  @Provide() img: string = require("@/static/img/headerImg.png");
+  @Provide() corpname: string = '';
+  @Provide() code: string = '';
+  @Provide() img: string = require('@/static/img/headerImg.png');
   @Provide() inner: Iobj = {
-    wxopenid: "",
-    wxname: "",
-    name: "",
-    mobile: "",
-    corpcode: "",
-    sex: "1",
-    cardid: "",
-    dept: "",
-    job: "",
-    image: ""
+    wxopenid: '',
+    wxname: '',
+    name: '',
+    mobile: '',
+    corpcode: '',
+    sex: '1',
+    cardid: '',
+    dept: '',
+    job: '',
+    image: '',
   };
-  @Watch("headerImg")
+  @Watch('headerImg')
   headerImgChange() {
-    this.uploadImg();
+    this.inner = {
+      ...this.inner,
+      image: this.headerImg,
+    };
   }
 
-  @Watch("token")
+  @Watch('token')
   tokenChange() {
     if (this.code) {
       this.getInfor(this.code);
@@ -122,123 +123,117 @@ export default class Index extends Vue {
   }
 
   onLoad(options: Iobj) {
-    this.code = options.scene || options.corpcode||uni.getStorageSync('corpname')
+    this.code =
+      options.scene || options.corpcode || uni.getStorageSync('corpname');
     this.token && this.code && this.getInfor(this.code);
   }
   changeSex(sex: number): void {
     this.inner = {
       ...this.inner,
-      sex
+      sex,
     };
   }
   async searchs() {
-    const data: any = await http.post("/Corp_Get", { corpcode: this.corpname });
-    uni.setStorageSync('corpname',this.corpname)
+    const data: any = await http.post('/Corp_Get', { corpcode: this.corpname });
+    uni.setStorageSync('corpname', this.corpname);
     this.inner = {
       ...this.inner,
-      corpcode: this.corpname
+      corpcode: this.corpname,
     };
     this.corpname = data.corpname;
     this.showSearch = false;
   }
   async getInfor(corpcode: string) {
-    const data: any = await http.post("/Corp_Get", { corpcode });
+    const data: any = await http.post('/Corp_Get', { corpcode });
     this.corpname = data.corpname;
     this.inner = {
       ...this.inner,
-      corpcode
+      corpcode,
     };
   }
   async submits(data: Iobj) {
-    const that = this
-    await http.postLock("/gather", data,that);
-    uni.showToast({ title: "提交成功" });
+    const that = this;
+    const { corpcode } = this.inner;
+    uni.showLoading({ title: '上传中' });
+    const res: any = await http.uploadFile('/ImagePerson',this.headerImg,corpcode);
+    data.image = res.url;
+    await http.postLock('/gather', data, that);
+    uni.showToast({ title: '提交成功' });
     const t = setTimeout(() => {
       clearTimeout(t);
       this.clearn();
     }, 500);
   }
-  async uploadImg() {
-    const { corpcode } = this.inner;
-    const res: any = await http.uploadFile(
-      "/ImagePerson",
-      this.headerImg,
-      corpcode
-    );
-    this.inner = {
-      ...this.inner,
-      image: res.url
-    };
-  }
+
   toList(): void {
-    uni.navigateTo({ url: "/pages/index/list" });
+    uni.navigateTo({ url: '/pages/index/list' });
   }
   camera() {
-    const camera = uni.getStorageSync("camera");
+    const camera = uni.getStorageSync('camera');
     if (!camera) {
-      uni.navigateTo({ url: "/pages/my/camera" });
+      uni.navigateTo({ url: '/pages/my/camera' });
     } else {
       wx.getSetting({
-        success: res => {
-          console.log(res.authSetting["scope.camera"]);
-          if (res.authSetting["scope.camera"] === false) {
+        success: (res) => {
+          console.log(res.authSetting['scope.camera']);
+          if (res.authSetting['scope.camera'] === false) {
             (this as any).$refs.alert.open();
           } else {
-            uni.navigateTo({ url: "/pages/my/camera" });
+            uni.navigateTo({ url: '/pages/my/camera' });
           }
-        }
+        },
       });
     }
   }
   clearn(): void {
-    const {corpcode,sex} = this.inner
+    const { corpcode, sex } = this.inner;
     this.inner = {
-      wxopenid: "",
-      wxname: "",
-      name: "",
-      mobile: "",
-      cardid: "",
-      dept: "",
-      job: "",
-      image: "",
+      wxopenid: '',
+      wxname: '',
+      name: '',
+      mobile: '',
+      cardid: '',
+      dept: '',
+      job: '',
+      image: '',
       corpcode,
-      sex
+      sex,
     };
   }
   confirm(): void {
     const { image, name, mobile, corpcode, cardid, dept, job } = this.inner;
     const { nickName } = this.userInfo;
     if (!image) {
-      toast("请上传图片");
+      toast('请上传图片');
       return;
     }
     if (!name) {
-      toast("请填写姓名");
+      toast('请填写姓名');
       return;
     }
     if (!corpcode) {
-      toast("请填写公司名");
+      toast('请填写公司名');
       return;
     }
     if (!mobile) {
-      toast("请填写手机号码");
+      toast('请填写手机号码');
       return;
     }
     if (isPhone(mobile)) {
-      toast("请填写正确的手机号码");
+      toast('请填写正确的手机号码');
       return;
     }
     this.submits({
       ...this.inner,
       wxname: nickName,
-      wxopenid: uni.getStorageSync("openid")
+      wxopenid: uni.getStorageSync('openid'),
     });
   }
   onShareAppMessage() {
     console.log(`/pages/index/index?corpcode=${this.inner.corpcode}`);
     return {
-      title: "智安云脸",
-      path: `/pages/index/index?corpcode=${this.inner.corpcode}`
+      title: '智安云脸',
+      path: `/pages/index/index?corpcode=${this.inner.corpcode}`,
     };
   }
 }
@@ -249,16 +244,11 @@ page {
   background: #fff;
 }
 .Index {
-  .imgBox {
+  .img {
     display: block;
     width: 260rpx;
-    height: 320rpx;
-    overflow: hidden;
-    margin: 30rpx auto;
-  }
-  .img {
-    width: 260rpx;
     height: 260rpx;
+    margin: 30rpx auto;
   }
   .li {
     display: flex;

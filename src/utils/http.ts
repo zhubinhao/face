@@ -26,7 +26,6 @@ class Http {
 	}
 	// 上传附件
 	uploadFile(url: string, filePath: string, corpcode: string) {
-		uni.showLoading({ title: "图片上传中..." })
 		return new Promise((resolve, reject) => uni.uploadFile({
 			url: this.httpUrl + url,
 			filePath: filePath,
@@ -36,7 +35,6 @@ class Http {
 				'corpcode': corpcode
 			},
 			success: (res: any) => {
-				uni.hideLoading()
 				resolve(JSON.parse(res.data))
 			}, fail: (res: any) => {
 				uni.hideLoading()
@@ -54,6 +52,7 @@ class Http {
 			method: method,
 			header: this.getHeader(),
 			success: (res: any) => {
+				uni.hideLoading()
 				if (res.data.code == 0) {
 						resolve(res.data)
 				} else {

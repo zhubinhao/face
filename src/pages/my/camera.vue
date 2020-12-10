@@ -1,36 +1,46 @@
 <template>
   <view>
     <view class="Camera" v-if="show">
-      <camera device-position="front" flash="off" class="Camera" >
+      <camera device-position="front" flash="off" class="Camera">
         <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
         <cover-view class='coverImg1' @click="takePhoto"></cover-view>
         <cover-view class='bg'></cover-view>
       </camera>
     </view>
+    <canvas canvas-id="canvas" class="canvas" :style="{width:width+'px',height:width+'px'}"></canvas>
   </view>
 
 </template>
 
 <script lang="ts">
 import { Vue, Component, Provide, Prop, Model } from 'vue-property-decorator';
-import { Mutation } from 'vuex-class'
+import { Mutation } from 'vuex-class';
+import { canvasToTempFilePath } from '@/utils/api';
 @Component
 export default class Camera extends Vue {
-  @Provide() show:Boolean = false;
-  @Provide() src: string = '';
+  @Provide() show: Boolean = false;
   @Provide() img: string = '../../static/img/face.png';
-  @Mutation public setHeaderImg!:Function
+  @Provide() width: number = 720;
+  @Mutation public setHeaderImg!: Function;
+  
   onReady() {
-    uni.setStorageSync('camera',true)
-    this.show = true
+    uni.setStorageSync('camera', true);
+    this.show = true;
   }
   takePhoto() {
     const ctx = wx.createCameraContext();
     ctx.takePhoto({
       quality: 'high',
-      success: (res) => {
-        this.setHeaderImg(res.tempImagePath)
-        uni.navigateBack({})
+      success: (res: any) => {
+        const ctx = wx.createCanvasContext('canvas');
+        ctx.drawImage(res.tempImagePath, 0, -50, res.width, (res.height * res.width) / this.width);
+        ctx.draw(true, () => {
+          canvasToTempFilePath('canvas', this.width, this.width).then(file => {
+              this.setHeaderImg(file);
+              uni.navigateBack({});
+            }
+          );           
+        });
       },
     });
   }
@@ -38,7 +48,6 @@ export default class Camera extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
 .Camera {
   position: fixed;
   left: 0;
@@ -46,14 +55,19 @@ export default class Camera extends Vue {
   top: 0;
   bottom: 0;
 }
-.bg{
+.canvas {
+  position: absolute;
+  left: -1000px;
+  visibility: hidden;
+}
+.bg {
   position: fixed;
   z-index: 1;
   left: 0;
   right: 0;
   top: 860rpx;
   bottom: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
 }
 .coverImg {
   position: fixed;
