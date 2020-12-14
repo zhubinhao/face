@@ -57,7 +57,8 @@ export const canvasToTempFilePath = function (canvasId: string, w: number, h: nu
 		destWidth: w,
 		destHeight: h,
 		canvasId,
-		success: (res) => {
+		fileType:"jpg",
+		success: (res:any) => {
 			resolve(res.tempFilePath)
 		},
 		fail: (res) => {

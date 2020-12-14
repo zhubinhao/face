@@ -36,7 +36,7 @@ import http from '@/utils/http';
 export default class List extends Vue {
   @Provide() list: Array<any> = [];
   onLoad() {
-    this.getGather();
+    return this.getGather();
   }
   async getGather() {
     const data: any = await http.post('/gather_Get', {
