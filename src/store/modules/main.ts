@@ -1,7 +1,19 @@
 import { Commit } from 'vuex';
+import Vuex, { GetterTree, ActionTree, MutationTree } from 'vuex'
+
 const state: any = {
+    nihao:"1",
+    hah:'12'
 }; 
+const getters: GetterTree<any, any> = {
+    getHello(state:any){
+    return 1212
+  }
+}
 const mutations: any = {
+    setHello(state:any,hello:any){
+        console.log(hello)
+    }
 }; 
 const actions: any = {
 };

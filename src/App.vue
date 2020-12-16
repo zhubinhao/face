@@ -15,19 +15,16 @@ export default Vue.extend({
       const _this = this;
       uni.login({
         provider: 'weixin',
-        success: function (loginRes) {
-          http
-            .post('/wxopenID', {
+        success: (loginRes) => {
+          http.post('/wxopenID', {
               token: '{A9B62A7B-CE65-4D80-A1B5-0713CC529F13}',
               code: loginRes.code,
             })
             .then((res: any) => {
               uni.setStorageSync('openid', res.openid);
               uni.setStorageSync('token', res.token);
-              _this.$store.commit('setToken', res.token);
-              console.log(res);
-            })
-            .catch((res) => {});
+              this.$store.commit('setToken', res.token);
+            });
         },
       });
     },

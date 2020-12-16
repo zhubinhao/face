@@ -23,18 +23,41 @@
 <script lang="ts">
 import LoadingMore from '@/component/LoadingMore.vue';
 import { Vue, Component, Provide } from 'vue-property-decorator';
+import { State , namespace} from 'vuex-class'
+const someModule = namespace('main')
 @Component({
-   components: {
+  components: {
     'loading-more': LoadingMore,
   },
 })
 export default class Out extends Vue {
-  @Provide() list: Array<any> = [1,2,3];
+  @Provide() list: Array<any> = [];
   @Provide() pageNo: number = 1;
   @Provide() dataType: number = 0; //0上拉加载更多,1加载中,2没有更多数据
-  
-  onLoad(optons: any) {
-    console.log(optons);
+  // @someModule.State nihao!:string
+  @someModule.Getter getHello!:string
+  @someModule.Mutation setHello!:Function
+  onReady(optons: any) {
+    this.setHello(12121)
+
+    function addAge(args: number){
+      return function(target:Function){
+        target.prototype.age = args
+      }
+    }
+
+    @addAge(18)
+    class Hello {
+      name!: string;
+      age!: number;
+      constructor(){
+        console.log("constructor")
+        this.name = "张三"
+      }
+    }
+    let hello = new Hello
+    console.log(hello.age)
+    
   }
   nativeTo(): void {
     uni.navigateTo({ url: '/pages/my/search' });
@@ -83,7 +106,7 @@ export default class Out extends Vue {
       line-height: 90rpx;
       color: #fff;
       font-size: 38rpx;
-      background: #448EED;
+      background: #448eed;
     }
     .main {
       flex: 1;
@@ -99,7 +122,7 @@ export default class Out extends Vue {
         font-size: 26rpx;
         color: gray;
         text {
-          color: #448EED;
+          color: #448eed;
         }
       }
       .time {
@@ -108,7 +131,7 @@ export default class Out extends Vue {
       }
     }
     .btn {
-      background: #448EED;
+      background: #448eed;
       border-radius: 8rpx;
       width: 110rpx;
       height: 60rpx;

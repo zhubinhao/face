@@ -1,11 +1,11 @@
-import { httpUrl } from './path'
+// import { httpUrl } from './path'
 import { Iobj, Tmethod } from '@/Interfaces/Icommon'
 import { toast } from '@/utils/api'
 
 class Http {
 	private httpUrl: string
 	constructor(url?: string) {
-		this.httpUrl = url || httpUrl
+		this.httpUrl = url || process.env.VUE_APP_URL
 	}
 	// get
 	get(url: string, data: Iobj = {}) {
