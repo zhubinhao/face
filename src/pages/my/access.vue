@@ -9,10 +9,11 @@
 </template>
 
 <script lang="ts">
+import { Vue, Component, Provide } from 'vue-property-decorator';
 import PeopleList from '@/component/PeopleList.vue';
 import Search from '@/component/Search.vue';
 import LoadingMore from '@/component/LoadingMore.vue';
-import { Vue, Component, Provide } from 'vue-property-decorator';
+
 @Component({
   components: {
     'people-list': PeopleList,

@@ -1,301 +1,151 @@
 <template>
-  <view class="Index">
-    <image :src="inner.image||img" class="img" @click="camera" mode="widthFix" />
-    <view>
-      <view class="li">
-        <text>
-          公
-          <text class="hidden">一</text>司
-          <text class="hidden">名</text>:
-        </text>
-        <input type="number" :disabled="!showSearch" v-model="corpname" placeholder="请填写企业编号" />
-        <view @click="searchs" v-if="showSearch">查询</view>
-      </view>
-      <view class="li">
-        <text>
-          姓
-          <text class="hidden">一</text>名
-          <text class="hidden">一</text>:
-        </text>
-        <input type="text" v-model="inner.name" placeholder="请填写姓名" />
-      </view>
-      <view class="li">
-        <text>
-          性
-          <text class="hidden">一</text>别
-          <text class="hidden">一</text>:
-        </text>
-        <view>
-          <label class="radio" @click="changeSex(1)">
-            <radio :value="1" :checked="inner.sex==1" />男
-          </label>
-          <label class="radio" @click="changeSex(2)">
-            <radio :value="2" :checked="inner.sex==2" />女
-          </label>
+  <view class="content">
+    <swiper class="swiper" autoplay indicator-color="rgba(0,0,0,0.15)" indicator-active-color="rgba(0,0,0,0.35)" indicator-dots interval="3000" style="height:168rpx; padding-top: 10rpx;" circular>
+      <swiper-item class="scroll_img">
+        <image src="https://file.shenlanbao.com/2020/11/20/file/img_banner_invitation.png" class="slide-image" />
+      </swiper-item>
+    </swiper>
+
+    <view class="jiu_box">
+      <block v-for="(item,index) in nineGrid" :key="index">
+        <view class='item' @click="nativeTo(item.path)">
+          <view class="image"  :style="{background:item.bg}">
+            <image :src="item.icon"></image>
+          </view>
+          <text class='msg'>{{item.title}}</text>
         </view>
-      </view>
-      <view class="li">
-        <text>
-          手机号
-          <text class="hidden">一</text>:
-        </text>
-        <input type="number" v-model="inner.mobile" maxlength="11" placeholder="请填写手机号称" />
-      </view>
-      <view class="li">
-        <text>身份证号:</text>
-        <input type="idcard" v-model="inner.cardid" maxlength="18" placeholder="请填写身份证号" />
-      </view>
-      <view class="li">
-        <text>
-          部
-          <text class="hidden">一</text>门
-          <text class="hidden">一</text>:
-        </text>
-        <input type="text" v-model="inner.dept" placeholder="请填写部门" />
-      </view>
-      <view class="li">
-        <text>
-          职
-          <text class="hidden">一</text>称
-          <text class="hidden">一</text>:
-        </text>
-        <input type="text" v-model="inner.job" placeholder="请填写职称" />
-      </view>
+      </block>
+    </view>
 
-      <view class="btn">
-        <text @click="confirm">提交</text>
-        <user-infor></user-infor>
+    <view class="title_box">
+      <view>
+        <image src="~@/static/img/小区.png"></image>
+        <text>xx小区</text>
+        <text class="phone">(18270846061)</text>
       </view>
-      <view class="btn1">
-        <text @click="toList">登记查询</text>
-        <user-infor></user-infor>
-      </view>
-
-      <z-alert msg="请到设置中开启摄像头权限" openType="openSetting" ref="alert"></z-alert>
+      <view class="change"> 切换 <text class="iconfont icon-right"></text></view>
+    </view>
+    <view class="card">
+      <List></List>
     </view>
   </view>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide, Watch } from 'vue-property-decorator';
-import { State } from 'vuex-class';
-import { Iobj } from '@/Interfaces/Icommon';
-import { toast, isPhone, isIdCard } from '@/utils/api';
-import http from '@/utils/http';
+import { Vue, Component, Provide } from 'vue-property-decorator';
+import List from '@/component/List.vue';
+import { nineGrid } from '@/utils/obj';
 
-@Component
+@Component({
+  components: {
+    List,
+  },
+})
 export default class Index extends Vue {
-  @State public token!: string;
-  @State public userInfo!: Iobj;
-  @State public headerImg!: string;
+  @Provide() nineGrid: Array<any> = nineGrid;
 
-  @Provide() showSearch: Boolean = false;
-  @Provide() corpname: string = '';
-  @Provide() code: string = '';
-  @Provide() img: string = require('@/static/img/headerImg.png');
-  @Provide() inner: Iobj = {
-    wxopenid: '',
-    wxname: '',
-    name: '',
-    mobile: '',
-    corpcode: '',
-    sex: '1',
-    cardid: '',
-    dept: '',
-    job: '',
-    image: '',
-  };
-  @Watch('headerImg')
-  headerImgChange() {
-    this.inner = {
-      ...this.inner,
-      image: this.headerImg,
-    };
-  }
-
-  @Watch('token')
-  tokenChange() {
-    if (this.code) {
-      this.getInfor(this.code);
-    } else {
-      this.showSearch = true;
-    }
-  }
-
-  onLoad(options: Iobj) {
-    this.code =
-      options.scene || options.corpcode || uni.getStorageSync('corpname');
-    this.token && this.code && this.getInfor(this.code);
-  }
-  changeSex(sex: number): void {
-    this.inner = {
-      ...this.inner,
-      sex,
-    };
-  }
-  async searchs() {
-    const data: any = await http.post('/Corp_Get', { corpcode: this.corpname });
-    uni.setStorageSync('corpname', this.corpname);
-    this.inner = {
-      ...this.inner,
-      corpcode: this.corpname,
-    };
-    this.corpname = data.corpname;
-    this.showSearch = false;
-  }
-  async getInfor(corpcode: string) {
-    const data: any = await http.post('/Corp_Get', { corpcode });
-    this.corpname = data.corpname;
-    this.inner = {
-      ...this.inner,
-      corpcode,
-    };
-  }
-  async submits(data: Iobj) {
-    const that = this;
-    const { corpcode } = this.inner;
-    uni.showLoading({ title: '上传中' });
-    const res: any = await http.uploadFile('/ImagePerson',this.headerImg,corpcode);
-    data.image = res.url;
-    await http.postLock('/gather', data, that);
-    uni.showToast({ title: '提交成功' });
-    const t = setTimeout(() => {
-      clearTimeout(t);
-      this.clearn();
-    }, 500);
-  }
-
-  toList(): void {
-    uni.navigateTo({ url: '/pages/index/list' });
-  }
-  camera() {
-    const camera = uni.getStorageSync('camera');
-    if (!camera) {
-      uni.navigateTo({ url: '/pages/my/camera' });
-    } else {
-      wx.getSetting({
-        success: (res) => {
-          console.log(res.authSetting['scope.camera']);
-          if (res.authSetting['scope.camera'] === false) {
-            (this as any).$refs.alert.open();
-          } else {
-            uni.navigateTo({ url: '/pages/my/camera' });
-          }
-        },
-      });
-    }
-  }
-  clearn(): void {
-    const { corpcode, sex } = this.inner;
-    this.inner = {
-      wxopenid: '',
-      wxname: '',
-      name: '',
-      mobile: '',
-      cardid: '',
-      dept: '',
-      job: '',
-      image: '',
-      corpcode,
-      sex,
-    };
-  }
-  confirm(): void {
-    const { image, name, mobile, corpcode, cardid, dept, job } = this.inner;
-    const { nickName } = this.userInfo;
-    if (!image) {
-      toast('请上传图片');
-      return;
-    }
-    if (!name) {
-      toast('请填写姓名');
-      return;
-    }
-    if (!corpcode) {
-      toast('请填写公司名');
-      return;
-    }
-    if (!mobile) {
-      toast('请填写手机号码');
-      return;
-    }
-    if (isPhone(mobile)) {
-      toast('请填写正确的手机号码');
-      return;
-    }
-    this.submits({
-      ...this.inner,
-      wxname: nickName,
-      wxopenid: uni.getStorageSync('openid'),
-    });
+  nativeTo(url: string): void {
+    uni.navigateTo({ url });
   }
   onShareAppMessage() {
-    console.log(`/pages/index/index?corpcode=${this.inner.corpcode}`);
     return {
       title: '智安云脸',
-      path: `/pages/index/index?corpcode=${this.inner.corpcode}`,
+      path: '/pages/index/index',
     };
   }
 }
 </script>
 
 <style lang="scss" scope>
-page {
-  background: #fff;
-}
-.Index {
-  .img {
-    display: block;
-    width: 260rpx;
-    height: 260rpx;
-    margin: 30rpx auto;
+.content {
+  .swiper {
+    margin: 10rpx 0;
   }
-  .li {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  .scroll_img {
+    box-sizing: border-box;
     padding: 0 30rpx;
-    height: 90rpx;
-    text {
-      width: 180rpx;
-    }
-    .hidden {
-      color: white;
-    }
-    input {
-      border-bottom: 1px solid $border-color;
-      flex: 1;
-      height: 60rpx;
-      margin-right: 30rpx;
-    }
-    .radio {
-      margin-right: 20rpx;
-    }
-  }
-  .h80 {
-    height: 80rpx;
-  }
-  .btn,
-  .btn1 {
     position: relative;
-    width: 690rpx;
-    margin: 30rpx auto;
-    border-radius: 10rpx;
-    background: #1f63f9;
-    color: white;
-    height: 80rpx;
-    text-align: center;
-    line-height: 80rpx;
-    text {
-      display: block;
+    image {
+      height: 168rpx;
       width: 100%;
-      height: 100%;
+      border-radius: 8rpx;
     }
   }
-  .btn1 {
-    border: 1px solid #1f63f9;
+  .jiu_box {
     background: white;
-    color: #1f63f9;
+    display: flex;
+    padding: 40rpx 30rpx 30rpx 30rpx;
+    margin: 20rpx 30rpx;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    .item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .image {
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+        background-color: #2ec4a7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32rpx;
+        color: white;
+        image {
+          width: 60rpx;
+          height: 60rpx;
+        }
+      }
+      .msg {
+        font-size: 28rpx;
+        margin-top: 20rpx;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+  .title_box {
+    padding: 0 30rpx;
+    background: #ffffff;
+    font-size: 32rpx;
+    margin: 20rpx 30rpx;
+    border-radius: 10rpx;
+    height: 90rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    > view {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    image {
+      width: 30rpx;
+      height: 30rpx;
+      margin-right: 10rpx;
+    }
+    .title {
+      font-weight: 600;
+    }
+    .phone {
+      font-size: 24rpx;
+      color: #8e8e8e;
+    }
+    .change {
+      color: #8e8e8e;
+      font-size: 28rpx;
+    }
+    .icon-right {
+      position: relative;
+      top: 4rpx;
+    }
+  }
+  .card {
+    padding: 0 30rpx;
   }
 }
 </style>
