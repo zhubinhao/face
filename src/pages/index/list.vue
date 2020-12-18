@@ -59,7 +59,6 @@ page {
     padding: 20rpx 0;
     font-size: 30rpx;
     color: gray;
-
     .name {
       margin-bottom: 10rpx;
     }

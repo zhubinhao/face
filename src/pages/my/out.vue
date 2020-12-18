@@ -23,8 +23,7 @@
 <script lang="ts">
 import LoadingMore from '@/component/LoadingMore.vue';
 import { Vue, Component, Provide } from 'vue-property-decorator';
-import { State , namespace} from 'vuex-class'
-const someModule = namespace('main')
+import { State } from 'vuex-class';
 @Component({
   components: {
     'loading-more': LoadingMore,
@@ -34,31 +33,7 @@ export default class Out extends Vue {
   @Provide() list: Array<any> = [];
   @Provide() pageNo: number = 1;
   @Provide() dataType: number = 0; //0上拉加载更多,1加载中,2没有更多数据
-  // @someModule.State nihao!:string
-  @someModule.Getter getHello!:string
-  @someModule.Mutation setHello!:Function
-  onReady(optons: any) {
-    this.setHello(12121)
 
-    function addAge(args: number){
-      return function(target:Function){
-        target.prototype.age = args
-      }
-    }
-
-    @addAge(18)
-    class Hello {
-      name!: string;
-      age!: number;
-      constructor(){
-        console.log("constructor")
-        this.name = "张三"
-      }
-    }
-    let hello = new Hello
-    console.log(hello.age)
-    
-  }
   nativeTo(): void {
     uni.navigateTo({ url: '/pages/my/search' });
   }

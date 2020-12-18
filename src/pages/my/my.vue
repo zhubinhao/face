@@ -12,48 +12,26 @@
       </view>
     </view>
 
-    <view class="li mb20" @click="nativeTo('/pages/my/family')">
-      <image />
-      <view>家庭成员</view>
-      <text class="iconfont icon-right"></text>
+    <view class="mb20" v-for="item in myList" :key="item.id">
+      <block v-for="it in item.list" :key="it.id">
+        <view class="li bd" @click="nativeTo(it.path)">
+          <image />
+          <view>{{it.title}}</view>
+          <text class="iconfont icon-right"></text>
+        </view>
+      </block>
     </view>
-
-    <view class="mb20">
-      <view class="li bd" @click="nativeTo('/pages/my/access')">
-        <image />
-        <view>访客</view>
-        <text class="iconfont icon-right"></text>
-      </view>
-      <view class="li bd" @click="nativeTo('/pages/my/out')">
-        <image />
-        <view>进出记录</view>
-        <text class="iconfont icon-right"></text>
-      </view>
-      <view class="li bd" @click="nativeTo('')">
-        <image />
-        <view>小区管理</view>
-        <text class="iconfont icon-right"></text>
-      </view>
-      <view class="li" @click="nativeTo('')">
-        <image />
-        <view>关联设备</view>
-        <text class="iconfont icon-right"></text>
-      </view>
-    </view>
-
-    <view class="li" @click="nativeTo('')">
-      <image />
-      <view>问题反馈</view>
-      <text class="iconfont icon-right"></text>
-    </view>
+ 
   </view>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Provide } from 'vue-property-decorator';
 import { toast } from '@/utils/api';
+import { myList } from '@/utils/obj';
 @Component
 export default class My extends Vue {
+  @Provide() myList: Array<any> = myList;
   created() {}
   nativeTo(url: string): void {
     if (url) {

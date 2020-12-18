@@ -28,7 +28,7 @@ export default class ALert extends Vue {
   }
   confirm(): void {
     this.$emit('confirm');
-    this.show = false;
+    this.cancel();
   }
 }
 </script>

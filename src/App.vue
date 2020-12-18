@@ -1,7 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import http from '@/utils/http';
-
+import { userApi } from '@/api/api';
+import { Iobj } from '@/Interfaces/Icommon';
 export default Vue.extend({
   mpType: 'app',
   onLaunch() {
@@ -11,30 +12,16 @@ export default Vue.extend({
   onShow() {},
   onHide() {},
   methods: {
-    getToken() {
-      const _this = this;
-      uni.login({
-        provider: 'weixin',
-        success: (loginRes) => {
-          http.post('/wxopenID', {
-              token: '{A9B62A7B-CE65-4D80-A1B5-0713CC529F13}',
-              code: loginRes.code,
-            })
-            .then((res: any) => {
-              uni.setStorageSync('openid', res.openid);
-              uni.setStorageSync('token', res.token);
-              this.$store.commit('setToken', res.token);
-            });
-        },
-      });
+    async getToken() {
+      const code: string = await userApi.getCode().then((res: any) => res.code);
+      const data = await userApi.getOpenId(code).then((res: any) => res);
+      uni.setStorageSync('openid', data.openid);
+      uni.setStorageSync('token', data.token);
+      this.$store.commit('setToken', data.token);
     },
-    getUserInfo() {
-      uni.getUserInfo({
-        success: (e: any) => {
-          const { userInfo } = e;
-          this.$store.commit('setUserInfo', userInfo);
-        },
-      });
+    async getUserInfo() {
+      const userInfo = await userApi.getUserInfo().then((res: any) => res.userInfo);
+      this.$store.commit('setUserInfo', userInfo);
     },
   },
 });

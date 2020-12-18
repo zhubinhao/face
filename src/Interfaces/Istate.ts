@@ -5,3 +5,7 @@ export interface Istate {
   userInfo: Iobj
   headerImg: string
 }
+
+export interface ImainState {
+  
+}

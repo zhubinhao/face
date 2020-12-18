@@ -1,6 +1,6 @@
 <template>
   <view class="LoadingMore">
-    <text v-if="type==1">1加载中...</text>
+    <text v-if="type==1">加载中...</text>
     <text v-if="type==2">没有更多数据~</text>
   </view>
 </template>
