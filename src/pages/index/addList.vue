@@ -81,7 +81,7 @@ import { Vue, Component, Provide, Watch } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import { Iobj } from '@/Interfaces/Icommon';
 import { toast, isPhone, isIdCard } from '@/utils/api';
-import http from '@/utils/http';
+import { indexApi } from '@/api/api'
 
 @Component
 export default class Index extends Vue {
@@ -133,21 +133,14 @@ export default class Index extends Vue {
       sex,
     };
   }
-  async searchs() {
-    const data: any = await http.post('/Corp_Get', { corpcode: this.corpname });
-    uni.setStorageSync('corpname', this.corpname);
-    this.inner = {
-      ...this.inner,
-      corpcode: this.corpname,
-    };
-    this.corpname = data.corpname;
-    this.showSearch = false;
+  searchs() {
+    return this.getInfor(this.corpname)
   }
   async getInfor(corpcode: string) {
-    const data: any = await http.post('/Corp_Get', { corpcode });
-    this.corpname = data.corpname;
+    const data: any = await indexApi.corpGet(corpcode)
     uni.setStorageSync('corpname', corpcode);
-
+    this.corpname = data.corpname;
+    this.showSearch = false;
     this.inner = {
       ...this.inner,
       corpcode,
@@ -157,9 +150,9 @@ export default class Index extends Vue {
     const that = this;
     const { corpcode } = this.inner;
     uni.showLoading({ title: '上传中' });
-    const res: any = await http.uploadFile('/ImagePerson',this.headerImg,corpcode);
+    const res: any = await indexApi.imagePerson(this.headerImg,corpcode)
     data.image = res.url;
-    await http.postLock('/gather', data, that);
+    await indexApi.gather(data, that)
     uni.showToast({ title: '提交成功' });
     const t = setTimeout(() => {
       clearTimeout(t);
