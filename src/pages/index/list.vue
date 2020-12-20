@@ -1,49 +1,59 @@
 <template>
   <view class="List">
     <view v-for="(item,index) in list" :key="index" class="list">
-      <view class="name">姓名：{{item.gat_name}}</view>
-      <view>
-        <text>性别：</text>
-        {{item.gat_sex==1?"男":"女"}}
+      <image :src="item.gat_image"></image>
+      <view class="flex1">
+        <view class="name">姓名：{{item.gat_name}}({{item.gat_state|state}})</view>
+        <view class="msg">
+          性别：{{item.gat_sex==1?"男":"女"}}
+        </view>
+        <view class="msg">
+          手机号： {{item.gat_mobile}}
+        </view>
+        <view class="msg">
+          身份证号： {{item.gat_cardid}}
+        </view>
+        <view class="msg">
+          部门： {{item.gat_dept}}
+        </view>
+        <view class="msg">
+          职位：{{item.gat_job}}
+        </view>
       </view>
-      <view>
-        <text>手机号：</text>
-        {{item.gat_mobile}}
-      </view>
-      <view>
-        <text>身份证号：</text>
-        {{item.gat_cardid}}
-      </view>
-      <view>
-        <text>部门：</text>
-        {{item.gat_dept}}
-      </view>
-      <view>
-        <text>职位：</text>
-        {{item.gat_job}}
+      <view class="delete" @click="dele(item.gat_id)">
+           删除
       </view>
     </view>
     <view v-if="list.length==0" class="wu">暂无登记记录</view>
+    <z-alert msg="确认删除该记录" ref="alert" @confirm="submit"></z-alert>
   </view>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Provide } from 'vue-property-decorator';
-import { Iobj } from '@/Interfaces/Icommon';
-import http from '@/utils/http';
-
+import { Vue, Component, Provide } from "vue-property-decorator";
+import { indexApi } from '@/api/api'
+import { toast } from '@/utils/api'
 @Component
 export default class List extends Vue {
   @Provide() list: Array<any> = [];
+  @Provide() id: string = '';
+
   onLoad() {
     return this.getGather();
   }
   async getGather() {
-    const data: any = await http.post('/gather_Get', {
-      wxopenid: uni.getStorageSync('openid'),
-    });
-    this.list = data.data;
-    console.log(data);
+    this.list =await indexApi.gatherGet().then((res:any)=>res.data)
+    console.log(this.list);
+  }
+  dele(id:string){
+    this.id = id;
+    (this.$refs as any).alert.open()
+  }
+  async submit(){
+    await indexApi.gatherDel(this.id)
+    toast("删除成功")
+    return this.getGather();
+
   }
 }
 </script>
@@ -58,15 +68,31 @@ page {
     margin: 0 30rpx;
     padding: 20rpx 0;
     font-size: 30rpx;
-    color: gray;
-    .name {
-      margin-bottom: 10rpx;
+    color: black;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    image {
+      width: 160rpx;
+      height: 160rpx;
+      margin-right: 20rpx;
+      border-radius: 10rpx;
     }
-    text {
-      color: black;
+    .name{ 
+      font-size: 30rpx
     }
+    .msg{
+      font-size: 24rpx
+    }
+    .flex1{
+      flex: 1;
+    }
+    .delete{
+      color: red
+    }
+    
   }
-  .wu{
+  .wu {
     color: gray;
     text-align: center;
     margin: 30rpx;

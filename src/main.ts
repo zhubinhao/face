@@ -5,6 +5,7 @@ import http from "@/utils/http";
 import UserInfor from "@/component/UserInfor.vue"
 import ALert from "@/component/ALert.vue"
 import '@/static/font/iconfont.scss'
+import '@/utils/filter'
 
 Vue.component("user-infor", UserInfor)
 Vue.component("z-alert", ALert)

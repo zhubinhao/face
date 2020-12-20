@@ -146,6 +146,8 @@ export default class Index extends Vue {
   async getInfor(corpcode: string) {
     const data: any = await http.post('/Corp_Get', { corpcode });
     this.corpname = data.corpname;
+    uni.setStorageSync('corpname', corpcode);
+
     this.inner = {
       ...this.inner,
       corpcode,

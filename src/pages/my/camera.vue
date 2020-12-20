@@ -4,6 +4,7 @@
       <camera device-position="front" flash="off" class="Camera">
         <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
         <cover-view class='coverImg1' @click="takePhoto"></cover-view>
+        <cover-view class='toast'>请确保人脸在虚线以内</cover-view>
         <cover-view class='bg'></cover-view>
       </camera>
     </view>
@@ -74,6 +75,15 @@ export default class Camera extends Vue {
   left: 0;
   right: 0;
   height: 860rpx;
+}
+.toast{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 920rpx;
+  text-align: center;
+  color: red;
+  font-size: 44rpx;
 }
 .coverImg1 {
   position: fixed;
