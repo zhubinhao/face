@@ -224,6 +224,12 @@ export default class Index extends Vue {
       wxopenid: uni.getStorageSync('openid'),
     });
   }
+  onShareAppMessage() {
+    return {
+      title: '智安云脸',
+      path: '/pages/index/addList',
+    };
+  }
 }
 </script>
 
