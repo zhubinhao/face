@@ -3,6 +3,7 @@ import Vue from 'vue';
 import http from '@/utils/http';
 import { userApi } from '@/api/api';
 import { Iobj } from '@/Interfaces/Icommon';
+
 export default Vue.extend({
   mpType: 'app',
   onLaunch() {
@@ -17,6 +18,7 @@ export default Vue.extend({
       const data = await userApi.getOpenId(code).then((res: any) => res);
       uni.setStorageSync('openid', data.openid);
       uni.setStorageSync('token', data.token);
+      uni.setStorageSync('base', data.base);
       this.$store.commit('setToken', data.token);
     },
     async getUserInfo() {

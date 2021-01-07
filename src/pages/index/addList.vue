@@ -42,10 +42,6 @@
         <input type="number" v-model="inner.mobile" maxlength="11" placeholder="请填写手机号称" />
       </view>
       <view class="li">
-        <text>身份证号:</text>
-        <input type="idcard" v-model="inner.cardid" maxlength="18" placeholder="请填写身份证号" />
-      </view>
-      <view class="li">
         <text>
           部
           <text class="hidden">一</text>门
@@ -100,7 +96,6 @@ export default class Index extends Vue {
     mobile: '',
     corpcode: '',
     sex: '1',
-    cardid: '',
     dept: '',
     job: '',
     image: '',
@@ -123,8 +118,7 @@ export default class Index extends Vue {
   }
 
   onLoad(options: Iobj) {
-    this.code =
-      options.scene || options.corpcode || uni.getStorageSync('corpname');
+    this.code = options.scene || options.corpcode || uni.getStorageSync('corpname');
     this.token && this.code && this.getInfor(this.code);
   }
   changeSex(sex: number): void {
@@ -187,7 +181,6 @@ export default class Index extends Vue {
       wxname: '',
       name: '',
       mobile: '',
-      cardid: '',
       dept: '',
       job: '',
       image: '',
@@ -196,7 +189,7 @@ export default class Index extends Vue {
     };
   }
   confirm(): void {
-    const { image, name, mobile, corpcode, cardid, dept, job } = this.inner;
+    const { image, name, corpcode, dept, job } = this.inner;
     const { nickName } = this.userInfo;
     if (!image) {
       toast('请上传图片');
@@ -210,14 +203,7 @@ export default class Index extends Vue {
       toast('请填写公司名');
       return;
     }
-    if (!mobile) {
-      toast('请填写手机号码');
-      return;
-    }
-    if (isPhone(mobile)) {
-      toast('请填写正确的手机号码');
-      return;
-    }
+    
     this.submits({
       ...this.inner,
       wxname: nickName,

@@ -34,11 +34,12 @@ class Http {
 				'token': uni.getStorageSync('token'),
 				'corpcode': corpcode
 			},
-			success: (res: any) => {
+			success: (res) => {
 				resolve(JSON.parse(res.data))
-			}, fail: (res: any) => {
+			}, fail: () => {
 				uni.hideLoading()
-				reject(res.data)
+				toast('上传失败，请稍后再试')
+				reject('')
 			}
 		})
 		)
@@ -65,7 +66,7 @@ class Http {
 	}
 
 	private getData(data: Iobj): Iobj {
-		const token = uni.getStorageSync('token') || '';
+		const token:string = uni.getStorageSync('token') || '';
 		if (token && !data.token) {
 			data.token = token
 		}

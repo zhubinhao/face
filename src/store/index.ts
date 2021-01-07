@@ -7,7 +7,7 @@ import { Iobj } from "@/Interfaces/Icommon"
 Vue.use(Vuex)
 
 const state: Istate = {
-	token: uni.getStorageSync('token') || '',
+	token: '',
 	barHeight: uni.getStorageSync('barHeight'),
 	userInfo: uni.getStorageSync('userInfo') || {},
 	headerImg: ''

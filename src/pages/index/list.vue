@@ -11,9 +11,6 @@
           手机号： {{item.gat_mobile}}
         </view>
         <view class="msg">
-          身份证号： {{item.gat_cardid}}
-        </view>
-        <view class="msg">
           部门： {{item.gat_dept}}
         </view>
         <view class="msg">

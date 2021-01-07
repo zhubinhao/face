@@ -2,9 +2,9 @@
   <view>
     <view class="Camera" v-if="show">
       <camera device-position="front" flash="off" class="Camera">
-        <cover-image class='coverImg' src='../../static/img/face.png'></cover-image>
+        <cover-image class='coverImg' src='../../static/img/face.png' v-if="base==1"></cover-image>
         <cover-view class='coverImg1' @click="takePhoto"></cover-view>
-        <cover-view class='toast'>请确保人脸在虚线以内</cover-view>
+        <cover-view class='toast' v-if="base==1">请确保人脸在虚线以内</cover-view>
         <cover-view class='bg'></cover-view>
       </camera>
     </view>
@@ -22,11 +22,14 @@ export default class Camera extends Vue {
   @Provide() show: Boolean = false;
   @Provide() img: string = '../../static/img/face.png';
   @Provide() width: number = 720;
+  @Provide() base:string|null = null
   @Mutation public setHeaderImg!: Function;
   
   onReady() {
     uni.setStorageSync('camera', true);
     this.show = true;
+    this.base =  uni.getStorageSync('base');
+
   }
   takePhoto() {
     const ctx = wx.createCameraContext();
